@@ -81,6 +81,7 @@ C:\Users\Lenovo\source\repos\react\ReactStore\ReactStore\obj\Debug\net8.0\ReactS
 C:\Users\Lenovo\source\repos\react\ReactStore\ReactStore\obj\Debug\net8.0\ReactStore.API.csproj.CoreCompileInputs.cache
 C:\Users\Lenovo\source\repos\react\ReactStore\ReactStore\obj\Debug\net8.0\ReactStore.API.MvcApplicationPartsAssemblyInfo.cs
 C:\Users\Lenovo\source\repos\react\ReactStore\ReactStore\obj\Debug\net8.0\ReactStore.API.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\Lenovo\source\repos\react\ReactStore\ReactStore\obj\Debug\net8.0\ReactStore.API.sourcelink.json
 C:\Users\Lenovo\source\repos\react\ReactStore\ReactStore\obj\Debug\net8.0\scopedcss\bundle\ReactStore.API.styles.css
 C:\Users\Lenovo\source\repos\react\ReactStore\ReactStore\obj\Debug\net8.0\staticwebassets.build.json
 C:\Users\Lenovo\source\repos\react\ReactStore\ReactStore\obj\Debug\net8.0\staticwebassets.build.json.cache

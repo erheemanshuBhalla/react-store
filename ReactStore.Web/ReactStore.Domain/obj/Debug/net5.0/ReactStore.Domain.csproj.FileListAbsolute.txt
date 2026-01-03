@@ -1,0 +1,11 @@
+C:\Users\Lenovo\source\repos\react\ReactStore\ReactStore.Domain\bin\Debug\net5.0\ReactStore.Domain.deps.json
+C:\Users\Lenovo\source\repos\react\ReactStore\ReactStore.Domain\bin\Debug\net5.0\ReactStore.Domain.dll
+C:\Users\Lenovo\source\repos\react\ReactStore\ReactStore.Domain\bin\Debug\net5.0\ReactStore.Domain.pdb
+C:\Users\Lenovo\source\repos\react\ReactStore\ReactStore.Domain\obj\Debug\net5.0\ReactStore.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Lenovo\source\repos\react\ReactStore\ReactStore.Domain\obj\Debug\net5.0\ReactStore.Domain.AssemblyInfoInputs.cache
+C:\Users\Lenovo\source\repos\react\ReactStore\ReactStore.Domain\obj\Debug\net5.0\ReactStore.Domain.AssemblyInfo.cs
+C:\Users\Lenovo\source\repos\react\ReactStore\ReactStore.Domain\obj\Debug\net5.0\ReactStore.Domain.csproj.CoreCompileInputs.cache
+C:\Users\Lenovo\source\repos\react\ReactStore\ReactStore.Domain\obj\Debug\net5.0\ReactStore.Domain.dll
+C:\Users\Lenovo\source\repos\react\ReactStore\ReactStore.Domain\obj\Debug\net5.0\refint\ReactStore.Domain.dll
+C:\Users\Lenovo\source\repos\react\ReactStore\ReactStore.Domain\obj\Debug\net5.0\ReactStore.Domain.pdb
+C:\Users\Lenovo\source\repos\react\ReactStore\ReactStore.Domain\obj\Debug\net5.0\ref\ReactStore.Domain.dll

@@ -1,0 +1,6 @@
+C:\Users\Lenovo\source\repos\react\ReactStore\ReactStore.Application\obj\Debug\net8.0\staticwebassets.build.json
+C:\Users\Lenovo\source\repos\react\ReactStore\ReactStore.Infrastructure\obj\Debug\net8.0\staticwebassets.build.json
+C:\Users\Lenovo\source\repos\react\ReactStore\ReactStore.Application\obj\Debug\net8.0\staticwebassets.build.json
+C:\Users\Lenovo\source\repos\react\ReactStore\ReactStore.Infrastructure\obj\Debug\net8.0\staticwebassets.build.json
+C:\Users\Lenovo\source\repos\react\ReactStore\ReactStore.Application\obj\Debug\net8.0\staticwebassets.build.json
+C:\Users\Lenovo\source\repos\react\ReactStore\ReactStore.Infrastructure\obj\Debug\net8.0\staticwebassets.build.json

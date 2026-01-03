@@ -24,7 +24,9 @@ export default function App() {
     <BrowserRouter>
     <Navbar />
     {/* 🔐 ADMIN ROUTES */}
-      <Route path="/admin" element={<AdminRoute />}>
+    
+      <Routes>
+          <Route path="/admin" element={<AdminRoute />}>
         <Route element={<AdminLayout />}>
 
           <Route index element={<AdminDashboard />} />
@@ -42,7 +44,6 @@ export default function App() {
 
         </Route>
       </Route>
-      <Routes>
         <Route path="/" element={<ProductSearch />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
@@ -53,18 +54,7 @@ export default function App() {
           </AuthGuard>
         } />
 
-        <Route path="/admin/products" element={
-          <AuthGuard role="Admin">
-            <AdminProducts />
-          </AuthGuard>
-        } />
-
-        <Route path="/admin/categories" element={
-          <AuthGuard role="Admin">
-            <AdminCategories />
-          </AuthGuard>
-        } />
-
+     
         <Route path="/orders/:id" element={
   <AuthGuard>
     <OrderDetailsPage />

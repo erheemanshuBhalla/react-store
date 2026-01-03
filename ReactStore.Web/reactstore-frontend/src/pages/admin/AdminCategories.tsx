@@ -1,29 +1,38 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect,  useState } from "react";
 import {
   getCategories,
   createCategory,
   updateCategory,
   deleteCategory
-} from "../categories/categoryApi";
-import type { Category } from "../types/product";
+} from "../../categories/categoryApi";
+import type { Category } from "../../types/product";
 
 export default function AdminCategories() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [name, setName] = useState("");
   const [editId, setEditId] = useState<number | null>(null);
- const loadedRef = useRef(false);
+ //const loadedRef = useRef(false);
 
   const load = useCallback(async () => {
     const data = await getCategories();
     setCategories(data);
   }, []);
 
-  useEffect(() => {
-    if (loadedRef.current) return;
-    loadedRef.current = true;
+ 
 
+  useEffect(() => {
+    const load = async () => {
+
+      const [categories] = await Promise.all([
+        getCategories()
+      ]);
+  
+     
+      setCategories(categories);
+    };
+  
     load();
-  }, [load]);
+  }, []);
 
   const submit = async () => {
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions

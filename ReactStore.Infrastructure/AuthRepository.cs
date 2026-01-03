@@ -20,7 +20,7 @@ namespace ReactStore.Infrastructure
 
         public async Task<User?> GetByEmailAsync(string email)
         {
-            var sql = "SELECT * FROM Users WHERE Email = @Email";
+            var sql = "select tbl1.*,tbl2.Name as 'Role' from users tbl1 join roles tbl2 on tbl1.RoleId=tbl2.Id where Email=@Email";
             using var conn = _context.CreateConnection();
             return await conn.QuerySingleOrDefaultAsync<User>(sql, new { Email = email });
         }

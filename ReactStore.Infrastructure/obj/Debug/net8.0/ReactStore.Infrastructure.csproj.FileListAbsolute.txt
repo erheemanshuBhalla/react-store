@@ -12,6 +12,7 @@ C:\Users\Lenovo\source\repos\react\ReactStore\ReactStore.Infrastructure\obj\Debu
 C:\Users\Lenovo\source\repos\react\ReactStore\ReactStore.Infrastructure\obj\Debug\net8.0\ReactStore.Infrastructure.AssemblyInfoInputs.cache
 C:\Users\Lenovo\source\repos\react\ReactStore\ReactStore.Infrastructure\obj\Debug\net8.0\ReactStore.Infrastructure.AssemblyInfo.cs
 C:\Users\Lenovo\source\repos\react\ReactStore\ReactStore.Infrastructure\obj\Debug\net8.0\ReactStore.Infrastructure.csproj.CoreCompileInputs.cache
+C:\Users\Lenovo\source\repos\react\ReactStore\ReactStore.Infrastructure\obj\Debug\net8.0\ReactStore.Infrastructure.sourcelink.json
 C:\Users\Lenovo\source\repos\react\ReactStore\ReactStore.Infrastructure\obj\Debug\net8.0\scopedcss\bundle\ReactStore.Infrastructure.styles.css
 C:\Users\Lenovo\source\repos\react\ReactStore\ReactStore.Infrastructure\obj\Debug\net8.0\staticwebassets.build.json
 C:\Users\Lenovo\source\repos\react\ReactStore\ReactStore.Infrastructure\obj\Debug\net8.0\staticwebassets.build.json.cache

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ReactStore.Application.Interfaces;
 using ReactStore.Infrastructure;
 
 namespace ReactStore.API.Controllers
@@ -10,9 +11,9 @@ namespace ReactStore.API.Controllers
     [Route("api/admin")]
     public class AdminController : ControllerBase
     {
-        private readonly AdminRepository _repo;
+        private readonly IAdminRepository _repo;
 
-        public AdminController(AdminRepository repo)
+        public AdminController(IAdminRepository repo)
         {
             _repo = repo;
         }

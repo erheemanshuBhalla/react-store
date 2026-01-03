@@ -162,7 +162,8 @@ namespace ReactStore.Infrastructure
                 {
                     if (!dict.TryGetValue(p.Id, out var prod))
                     {
-                        prod = p with { Categories = new List<CategoryDto>() };
+                        prod = p;
+                        prod.Categories = new List<CategoryDto>();
                         dict.Add(p.Id, prod);
                     }
 
