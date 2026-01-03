@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v5.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v5.0": {
+      "ReactStore.Domain/1.0.0": {
+        "runtime": {
+          "ReactStore.Domain.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "ReactStore.Domain/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

@@ -1,0 +1,167 @@
+﻿CREATE DATABASE ECommerceDb;
+GO
+USE ECommerceDb;
+GO
+CREATE TABLE Roles (
+    Id INT IDENTITY PRIMARY KEY,
+    Name NVARCHAR(50) NOT NULL UNIQUE
+);
+
+INSERT INTO Roles (Name)
+VALUES ('User'), ('Admin');
+
+CREATE TABLE Users (
+    Id INT IDENTITY PRIMARY KEY,
+    Name NVARCHAR(100) NOT NULL,
+    Email NVARCHAR(150) NOT NULL UNIQUE,
+    PasswordHash NVARCHAR(255) NOT NULL,
+    RoleId INT NOT NULL,
+    CreatedAt DATETIME2 DEFAULT GETUTCDATE(),
+    FOREIGN KEY (RoleId) REFERENCES Roles(Id)
+);
+CREATE TABLE Categories (
+    Id INT IDENTITY PRIMARY KEY,
+    Name NVARCHAR(100) NOT NULL UNIQUE,
+    IsActive BIT DEFAULT 1,
+    CreatedAt DATETIME2 DEFAULT GETUTCDATE()
+);
+CREATE TABLE Products (
+    Id INT IDENTITY PRIMARY KEY,
+    Name NVARCHAR(200) NOT NULL,
+    Description NVARCHAR(500),
+    Price DECIMAL(18,2) NOT NULL,
+    Stock INT NOT NULL DEFAULT 0,
+    IsActive BIT DEFAULT 1,
+    CreatedAt DATETIME2 DEFAULT GETUTCDATE()
+);
+CREATE TABLE ProductCategories (
+    ProductId INT NOT NULL,
+    CategoryId INT NOT NULL,
+    PRIMARY KEY (ProductId, CategoryId),
+    FOREIGN KEY (ProductId) REFERENCES Products(Id) ON DELETE CASCADE,
+    FOREIGN KEY (CategoryId) REFERENCES Categories(Id)
+);
+CREATE TABLE Orders (
+    Id INT IDENTITY PRIMARY KEY,
+    UserId INT NOT NULL,
+    TotalAmount DECIMAL(18,2) NOT NULL,
+    Status NVARCHAR(50) NOT NULL DEFAULT 'Pending',
+    Address NVARCHAR(500) NOT NULL,
+    CreatedAt DATETIME2 DEFAULT GETUTCDATE(),
+    FOREIGN KEY (UserId) REFERENCES Users(Id)
+);
+CREATE TABLE OrderItems (
+    Id INT IDENTITY PRIMARY KEY,
+    OrderId INT NOT NULL,
+    ProductId INT NOT NULL,
+    ProductName NVARCHAR(200) NOT NULL,
+    Price DECIMAL(18,2) NOT NULL,
+    Quantity INT NOT NULL,
+    FOREIGN KEY (OrderId) REFERENCES Orders(Id) ON DELETE CASCADE,
+    FOREIGN KEY (ProductId) REFERENCES Products(Id)
+);
+CREATE INDEX IX_Users_Email ON Users(Email);
+CREATE INDEX IX_Products_Price ON Products(Price);
+CREATE INDEX IX_Orders_UserId ON Orders(UserId);
+CREATE INDEX IX_Orders_Status ON Orders(Status);
+-- Categories
+INSERT INTO Categories (Name)
+VALUES ('Electronics'), ('Clothing'), ('Books');
+
+-- Products
+INSERT INTO Products (Name, Description, Price, Stock)
+VALUES 
+('Laptop', 'Gaming Laptop', 75000, 10),
+('T-Shirt', 'Cotton T-Shirt', 999, 50),
+('Book', 'Programming Book', 599, 100);
+
+-- Product Categories
+INSERT INTO ProductCategories (ProductId, CategoryId)
+VALUES
+(1, 1),
+(2, 2),
+(3, 3);
+
+
+
+
+CREATE PROCEDURE sp_SearchProducts
+    @CategoryId INT = NULL,
+    @MinPrice DECIMAL(18,2) = NULL,
+    @MaxPrice DECIMAL(18,2) = NULL,
+    @SortBy NVARCHAR(20) = 'price',
+    @SortDir NVARCHAR(4) = 'ASC',
+    @Page INT = 1,
+    @PageSize INT = 10
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT DISTINCT p.*
+    FROM Products p
+    LEFT JOIN ProductCategories pc ON p.Id = pc.ProductId
+    WHERE
+        (@CategoryId IS NULL OR pc.CategoryId = @CategoryId)
+        AND (@MinPrice IS NULL OR p.Price >= @MinPrice)
+        AND (@MaxPrice IS NULL OR p.Price <= @MaxPrice)
+    ORDER BY
+        CASE WHEN @SortBy = 'price' AND @SortDir = 'ASC' THEN p.Price END ASC,
+        CASE WHEN @SortBy = 'price' AND @SortDir = 'DESC' THEN p.Price END DESC,
+        CASE WHEN @SortBy = 'name' THEN p.Name END
+    OFFSET (@Page - 1) * @PageSize ROWS
+    FETCH NEXT @PageSize ROWS ONLY;
+END;
+
+
+CREATE PROCEDURE sp_GetOrdersByUser
+    @UserId INT
+AS
+BEGIN
+    SELECT * FROM Orders
+    WHERE UserId = @UserId
+    ORDER BY CreatedAt DESC;
+END;
+
+CREATE PROCEDURE sp_GetOrderDetails
+    @OrderId INT
+AS
+BEGIN
+    SELECT * FROM Orders WHERE Id = @OrderId;
+
+    SELECT ProductName, Price, Quantity
+    FROM OrderItems
+    WHERE OrderId = @OrderId;
+END;
+
+INSERT INTO Users (Name, Email, PasswordHash, RoleId)
+VALUES (
+    'Admin',
+    'admin@site.com',
+    '$2a$11$XXXXXXXXXXXXXXXXXXXXXXXXXXXX', -- bcrypt hash
+    (SELECT Id FROM Roles WHERE Name = 'Admin')
+);
+
+CREATE PROCEDURE sp_AdminDashboard
+AS
+BEGIN
+    -- KPIs
+    SELECT
+        (SELECT COUNT(*) FROM Orders) AS TotalOrders,
+        (SELECT ISNULL(SUM(TotalAmount), 0) FROM Orders) AS TotalRevenue,
+        (SELECT COUNT(*) FROM Users) AS TotalUsers,
+        (SELECT COUNT(*) FROM Products) AS TotalProducts;
+
+    -- Recent Orders
+    SELECT TOP 10
+        o.Id AS OrderId,
+        u.Email AS UserEmail,
+        o.TotalAmount,
+        o.Status,
+        o.CreatedAt
+    FROM Orders o
+    JOIN Users u ON u.Id = o.UserId
+    ORDER BY o.CreatedAt DESC;
+END;
+
+ALTER TABLE Products
+ADD ImageUrl NVARCHAR(300) NULL;
