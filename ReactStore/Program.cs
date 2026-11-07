@@ -1,72 +1,91 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using ReactStore.Application.Interfaces;
 using ReactStore.Infrastructure;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
-var jwt = builder.Configuration.GetSection("Jwt");
 
-// Add services to the container.
-
+// ── Controllers + Swagger ───────────────────────────────────────────────────
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "ReactStore API", Version = "v1" });
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "Enter your JWT token"
+    });
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" }
+            },
+            Array.Empty<string>()
+        }
+    });
+});
 
+// ── CORS ────────────────────────────────────────────────────────────────────
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("ReactApp", policy =>
+        policy.WithOrigins("http://localhost:5173", "http://localhost:3000")
+              .AllowAnyHeader()
+              .AllowAnyMethod());
+});
+
+// ── Dapper DI ───────────────────────────────────────────────────────────────
 builder.Services.AddSingleton<DapperContext>();
-
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
-builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
-builder.Services.AddScoped<IAdminRepository, AdminRepository>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<AdminRepository>();
 
+// ── JWT Authentication ───────────────────────────────────────────────────────
+var jwtKey = builder.Configuration["Jwt:Key"]
+    ?? throw new InvalidOperationException("Jwt:Key is not configured.");
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
         options.TokenValidationParameters = new TokenValidationParameters
         {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
+            ValidateIssuer           = true,
+            ValidateAudience         = true,
+            ValidateLifetime         = true,
             ValidateIssuerSigningKey = true,
-
-            ValidIssuer = jwt["Issuer"],
-            ValidAudience = jwt["Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(jwt["Key"]!)
-            )
+            ValidIssuer              = builder.Configuration["Jwt:Issuer"],
+            ValidAudience            = builder.Configuration["Jwt:Audience"],
+            IssuerSigningKey         = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
         };
     });
 
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowReact",
-        policy =>
-        {
-            policy
-                .WithOrigins("http://localhost:5173") // Vite React
-                .AllowAnyHeader()
-                .AllowAnyMethod()
-                .AllowCredentials();
-        });
-});
+builder.Services.AddAuthorization();
 
+// ── App ─────────────────────────────────────────────────────────────────────
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-app.UseCors("AllowReact");
+
 app.UseHttpsRedirection();
-
+app.UseStaticFiles();          // serve /wwwroot (uploaded product images)
+app.UseCors("ReactApp");
+app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapControllers();
 
 app.Run();

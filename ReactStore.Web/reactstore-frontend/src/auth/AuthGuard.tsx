@@ -8,7 +8,7 @@ interface Props {
 
 export default function AuthGuard({ children, role }: Props) {
   const token = localStorage.getItem("token");
-  const userRole = localStorage.getItem("role"); // store role on login
+  const userRole = localStorage.getItem("role"); // now correctly stored as "role" key
 
   if (!token) return <Navigate to="/login" />;
 
